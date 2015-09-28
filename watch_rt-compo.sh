@@ -11,9 +11,9 @@ source $1
 
 
 export LC_ALL=fr_FR.UTF-8
-NB=$(/usr/bin/rt ls -i "$Query")
+NB=$(/usr/bin/rt ls -i "$Query" 2>/dev/null)
 if ! [ $? -eq 0 ]; then
-	echo "erreur query, on sort"
+	[ QUIET -eq 0 ] && echo "erreur query, on sort"
 	exit 1
 fi
 
@@ -23,7 +23,7 @@ for i in $NB; do
 	NEW_TICKET=0
 	[ ! -d $DATADIR/$i ] && NEW_TICKET=1
 	[ $NEW_TICKET -eq 1 ] && mkdir  -p $DATADIR/$i
-	[ $INIT -eq 0 ] && [ $NEW_TICKET -eq 1 ] && ( echo -e "Une nouvelle demande vient d'etre émise\n\n" ;/usr/bin/rt show -l -f id,requestors,creator,created,subject $i;echo -e "\nLien RT: https://rt.unistra.fr/rt/Ticket/Display.html?id=$NUMERO\n\n") |nail -r $FROMMAIL -s "$SUBJECTMAIL" $TOMAIL
+	[ $INIT -eq 0 ] && [ $NEW_TICKET -eq 1 ] && ( echo -e "Une nouvelle demande vient d'etre émise\n\n" ;/usr/bin/rt show -l -f id,requestors,creator,created,subject $i 2>/dev/null ;echo -e "\nLien RT: https://rt.unistra.fr/rt/Ticket/Display.html?id=$NUMERO\n\n") |nail -r $FROMMAIL -s "$SUBJECTMAIL" $TOMAIL
 done
 
 exit 0
