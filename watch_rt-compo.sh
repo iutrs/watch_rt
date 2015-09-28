@@ -13,7 +13,7 @@ source $1
 export LC_ALL=fr_FR.UTF-8
 NB=$(/usr/bin/rt ls -i "$Query" 2>/dev/null)
 if ! [ $? -eq 0 ]; then
-	[ QUIET -eq 0 ] && echo "erreur query, on sort"
+	[ $QUIET -eq 0 ] && echo "erreur query, on sort"
 	exit 1
 fi
 
